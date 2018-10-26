@@ -50,7 +50,7 @@ function snort_install() {
 	rm -r *.tar.gz > /dev/null 2>&1
 	mv snort-*/ snort
 	cd snort
-	./configure --enable-sourcefire && make && sudo make install
+	./configure --enable-sourcefire --disable-open-appid && make && sudo make install
 	echo -ne "\n\t${GREEN}[+] INFO:${NOCOLOR} ${BOLD}$SNORT${NOCOLOR} installed successfully.\n\n"
 	cd ..
 
