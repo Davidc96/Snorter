@@ -18,14 +18,14 @@ BOLD='\033[1m'
 function update_upgrade() {
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Updating and Upgrading repositories...\n\n"
-	sudo apt-get update && sudo apt-get upgrade -y --force-yes
+	sudo apt-get update && sudo apt-get upgrade -y
 
 }
 
 function snort_install() {
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Installing dependencies.\n\n"
-	sudo apt-get install -y --force-yes build-essential libpcap-dev libpcre3-dev libdumbnet-dev bison flex zlib1g-dev git locate vim
+	sudo apt-get install -y build-essential libpcap-dev libpcre3-dev libdumbnet-dev bison flex zlib1g-dev git mlocate vim
 
 	#Downloading DAQ and SNORT
 	cd $HOME && mkdir snort_src && cd snort_src
