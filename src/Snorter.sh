@@ -192,7 +192,7 @@ function barnyard2_install() {
 	sudo add-apt-repository multiverse
 	sudo add-apt-repository ppa:dns/gnu
 
-	sudo apt-get install -y mysql-server libmysqlclient-dev mysql-client autoconf libtool libdumbnet1 checkinstall yagiuda libumbnet-dev mlocate
+	sudo apt-get install -y mysql-server libmysqlclient-dev mysql-client autoconf libtool libdumbnet1 checkinstall yagiuda libdumbnet-dev mlocate
 
 	cd $HOME/snort_src
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Downloading ${BOLD}BARNYARD2${NOCOLOR}.\n\n"
