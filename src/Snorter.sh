@@ -233,7 +233,7 @@ function barnyard2_install() {
 	sudo mysql -u root -p -D snort < $HOME/snort_src/barnyard2/schemas/create_mysql
 	echo "grant create, insert, select, delete, update on snort.* to 'snort'@'localhost' identified by '$SNORTSQLPASSWORD'" | sudo mysql -u root -p
 
-	sudo sh -c "echo 'output database: log, mysql, user=snort password=$SNORTSQLPASSWORD dbname=snort host=localhost' >> /etc/snort/barnyard2.conf"
+	sudo sh -a -c "echo 'output database: log, mysql, user=snort password=$SNORTSQLPASSWORD dbname=snort host=localhost' >> /etc/snort/barnyard2.conf"
 	sudo chmod 766 /etc/snort/barnyard2.conf
 	sudo chmod o-r /etc/snort/barnyard2.conf
 
@@ -283,7 +283,7 @@ function pulledpork_install() {
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Adding ${BOLD}PULLEDPORK${NOCOLOR} to crontab. [Everyday at 4:15 AM].\n\n"
 	sudo chmod 766 /etc/crontab
-	sudo sh -c 'echo "15 4 * * * root /usr/local/bin/pulledpork.pl -c /etc/snort/pulledpork.conf -i disablesid.conf -T -H" >> /etc/crontab'
+	sudo sh -a -c 'echo "15 4 * * * root /usr/local/bin/pulledpork.pl -c /etc/snort/pulledpork.conf -i disablesid.conf -T -H" >> /etc/crontab'
 	sudo echo "15 6	* * * root /usr/local/bin/ruleitor" >> /etc/crontab
 
 	sudo pulledpork.pl -V
@@ -401,7 +401,7 @@ function service_create() {
 function service_add() {
 
 	if [ -f /etc/snort/barnyard2.conf ]; then
-sudo sh -c 'echo """
+sudo sh -a -c 'echo """
 [Unit]
 Description=Barnyard2 Daemon
 After=syslog.target network.target
@@ -416,7 +416,7 @@ WantedBy=multi-user.target
 """ > /lib/systemd/system/barnyard2.service'
 fi
 
-sudo sh -c 'echo """
+sudo sh -a -c 'echo """
 [Unit]
 Description=Snort NIDS Daemon
 After=syslog.target network.target
@@ -495,7 +495,7 @@ function last_steps() {
 		[yY][eE][sS]|[yY])
 			sudo sh -c 'echo "# Community and Emerging Rules enabled" >> /etc/snort/snort.conf'
 			for RULE in $(ls -l /etc/snort/rules/emerging-*.rules | awk '{print $9}'); do
-				sudo sh -c 'echo "include $RULE" >> /etc/snort/snort.conf ;'
+				sudo sh -a -c 'echo "include $RULE" >> /etc/snort/snort.conf ;'
 			done
 			sudo sh -c 'echo "include /etc/snort/rules/community.rules" >> /etc/snort/snort.conf'
 			sudo systemctl restart snort barnyard2
