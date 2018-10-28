@@ -229,9 +229,9 @@ function barnyard2_install() {
 	echo -ne "\n\n"
 
 	sudo /etc/init.d/mysql start > /dev/null 2>&1
-	echo "create database snort;" | mysql -u root -p
-	mysql -u root -p -D snort < $HOME/snort_src/barnyard2/schemas/create_mysql
-	echo "grant create, insert, select, delete, update on snort.* to 'snort'@'localhost' identified by '$SNORTSQLPASSWORD'" | mysql -u root -p
+	echo "create database snort;" | sudo mysql -u root -p
+	sudo mysql -u root -p -D snort < $HOME/snort_src/barnyard2/schemas/create_mysql
+	echo "grant create, insert, select, delete, update on snort.* to 'snort'@'localhost' identified by '$SNORTSQLPASSWORD'" | sudo mysql -u root -p
 
 	sudo echo "output database: log, mysql, user=snort password=$SNORTSQLPASSWORD dbname=snort host=localhost" >> /etc/snort/barnyard2.conf
 	sudo chmod 766 /etc/snort/barnyard2.conf
