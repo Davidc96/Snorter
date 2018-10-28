@@ -495,7 +495,7 @@ function last_steps() {
 		[yY][eE][sS]|[yY])
 			sudo sh -c 'echo "# Community and Emerging Rules enabled" >> /etc/snort/snort.conf'
 			for RULE in $(ls -l /etc/snort/rules/emerging-*.rules | awk '{print $9}'); do
-				echo "include $RULE" >> /etc/snort/snort.conf ;
+				sudo sh -c 'echo "include $RULE" >> /etc/snort/snort.conf ;'
 			done
 			sudo sh -c 'echo "include /etc/snort/rules/community.rules" >> /etc/snort/snort.conf'
 			sudo systemctl restart snort barnyard2
