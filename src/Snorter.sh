@@ -268,7 +268,7 @@ function pulledpork_ask() {
 function pulledpork_install() {
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Installing dependencies.\n\n"
-	sudo apt-get install -y --force-yes libcrypt-ssleay-perl liblwp-useragent-determined-perl
+	sudo apt-get install -y libcrypt-ssleay-perl liblwp-useragent-determined-perl
 
 	cd $HOME/snort_src
 
@@ -283,7 +283,7 @@ function pulledpork_install() {
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Adding ${BOLD}PULLEDPORK${NOCOLOR} to crontab. [Everyday at 4:15 AM].\n\n"
 	sudo chmod 766 /etc/crontab
-	sudo echo "15 4 * * * root /usr/local/bin/pulledpork.pl -c /etc/snort/pulledpork.conf -i disablesid.conf -T -H" >> /etc/crontab
+	sudo sh -c 'echo "15 4 * * * root /usr/local/bin/pulledpork.pl -c /etc/snort/pulledpork.conf -i disablesid.conf -T -H" >> /etc/crontab'
 	sudo echo "15 6	* * * root /usr/local/bin/ruleitor" >> /etc/crontab
 
 	sudo pulledpork.pl -V
@@ -401,7 +401,7 @@ function service_create() {
 function service_add() {
 
 	if [ -f /etc/snort/barnyard2.conf ]; then
-sudo echo """
+sudo sh -c 'echo """
 [Unit]
 Description=Barnyard2 Daemon
 After=syslog.target network.target
@@ -413,10 +413,10 @@ ExecStart=/usr/local/bin/barnyard2 -D -c /etc/snort/barnyard2.conf -d /var/log/s
 
 [Install]
 WantedBy=multi-user.target
-""" > /lib/systemd/system/barnyard2.service
+""" > /lib/systemd/system/barnyard2.service'
 fi
 
-sudo echo """
+sudo sh -c 'echo """
 [Unit]
 Description=Snort NIDS Daemon
 After=syslog.target network.target
@@ -429,7 +429,7 @@ ExecStart=/usr/local/bin/snort -q -u snort -g snort -c /etc/snort/snort.conf -i 
 
 [Install]
 WantedBy=multi-user.target
-""" > /lib/systemd/system/snort.service
+""" > /lib/systemd/system/snort.service'
 }
 
 function websnort_ask() {
@@ -457,7 +457,7 @@ function websnort_ask() {
 function websnort_install() {
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Installing dependencies.\n\n"
-	sudo apt-get install -y --force-yes python-pip
+	sudo apt-get install -y python-pip
 	sudo pip install websnort > /dev/null 2>&1
 
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} running ${BOLD}WEBSNORT${NOCOLOR} on ${BOLD}http://localhost:80${NOCOLOR}.\n\n"
@@ -493,11 +493,11 @@ function last_steps() {
 	read OPTION
 	case "$OPTION" in
 		[yY][eE][sS]|[yY])
-			echo "# Community and Emerging Rules enabled" >> /etc/snort/snort.conf
+			sudo sh -c 'echo "# Community and Emerging Rules enabled" >> /etc/snort/snort.conf'
 			for RULE in $(ls -l /etc/snort/rules/emerging-*.rules | awk '{print $9}'); do
 				echo "include $RULE" >> /etc/snort/snort.conf ;
 			done
-			echo "include /etc/snort/rules/community.rules" >> /etc/snort/snort.conf
+			sudo sh -c 'echo "include /etc/snort/rules/community.rules" >> /etc/snort/snort.conf'
 			sudo systemctl restart snort barnyard2
 			echo -ne "\n\t${GREEN}[+] SUCCESS:${NOCOLOR} ${BOLD}Emerging Threats${NOCOLOR} and ${BOLD}Community${NOCOLOR} rules enabled\n\n"
         		;;
@@ -574,7 +574,6 @@ function main() {
 }
 
 #PARSE PARAMETERS/CHECK FOR INTERFACE/CHECK FOR OINKCODE
-
 banner
 
 while getopts ":o:i:" OPTION; do
@@ -602,6 +601,7 @@ fi
 
 if [ "$(echo ${#OINKCODE})" -eq 40 ]; then
 
+	sudo apt-get install -y curl
 	MACHINE=$(echo $(uname -m))
 	SNORT=$(echo $(curl -s -k https://www.snort.org | grep "wget" | grep -oP "snort\-\d.\d\.\d+(\.\d)?"))
 	DAQ=$(echo $(curl -s -k https://www.snort.org | grep "wget" | grep -oP "daq\-\d\.\d\.\d"))
@@ -620,6 +620,7 @@ elif [ "$(echo ${#OINKCODE})" -lt 40 ] && [ "$(echo ${#OINKCODE})" -gt 0 ]; then
 
 elif [ $(echo ${#OINKCODE}) -lt 40 ] || [ $(echo ${#OINKCODE}) -gt 1 ]; then
 
+	sudo apt-get install -y curl
 	MACHINE=$(echo $(uname -m))
 	SNORT=$(echo $(curl -s -k https://www.snort.org | grep "wget" | grep -oP "snort\-\d.\d\.\d+(\.\d)?"))
 	DAQ=$(echo $(curl -s -k https://www.snort.org | grep "wget" | grep -oP "daq\-\d\.\d\.\d"))
