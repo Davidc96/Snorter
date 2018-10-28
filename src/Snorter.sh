@@ -185,8 +185,14 @@ function barnyard2_install() {
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} You will be asked for a ${BOLD}password for MySQL${NOCOLOR} service if it isn't installed in the system."
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Press ${BOLD}ENTER${NOCOLOR} to continue. "
 	read -n 1 -s
+	
+	sudo add-apt-repository main
+	sudo add-apt-repository universe
+	sudo add-apt-repository restricted
+	sudo add-apt-repository multiverse
+	sudo add-apt-repository ppa:dns/gnu
 
-	sudo apt-get install -y --force-yes mysql-server libmysqlclient-dev mysql-client autoconf libtool libdnet checkinstall yagiuda libdnet-dev locate
+	sudo apt-get install -y mysql-server libmysqlclient-dev mysql-client autoconf libtool libdumbnet1 checkinstall yagiuda libumbnet-dev mlocate
 
 	cd $HOME/snort_src
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Downloading ${BOLD}BARNYARD2${NOCOLOR}.\n\n"
