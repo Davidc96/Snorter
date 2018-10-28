@@ -325,7 +325,7 @@ function pulledpork_edit() {
 	sudo sed -i "s/distro=FreeBSD-8-1/distro=Debian-8-4/g" /etc/snort/pulledpork.conf
 	sudo sed -i "s/# out_path=/out_path=/g" /etc/snort/pulledpork.conf
 
-	sudo echo """
+	sudo sh -c 'echo """
 	#!/bin/bash
 
 	#Snort Snapshot
@@ -346,7 +346,7 @@ function pulledpork_edit() {
 
 	#Adding permissions
 	chmod 777 /etc/snort/rules/*.rules
-	""" > /usr/local/bin/ruleitor
+	""" > /usr/local/bin/ruleitor'
 	sudo chmod 777 /usr/local/bin/ruleitor
 
 }
